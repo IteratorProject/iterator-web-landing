@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 import gsap from "gsap";
 
 export default function IntroAnimation() {
     const [isVisible, setIsVisible] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
+    const { t } = useLanguage();
 
     useEffect(() => {
-        // Check session storage to see if we've already shown the animation
         const hasVisited = sessionStorage.getItem("hasVisitedIterator");
 
         if (hasVisited) {
@@ -25,13 +26,11 @@ export default function IntroAnimation() {
         });
 
         const textElement = textRef.current;
-        const words = ["Try", "Fail", "Learn", "Repeat"];
+        const words = t.intro.words;
 
-        // Initial state
         gsap.set(containerRef.current, { opacity: 1 });
         gsap.set(textElement, { opacity: 0, y: 20 });
 
-        // Loop through the sequence twice to simulate loading/effort
         for (let i = 0; i < 1; i++) {
             words.forEach((word) => {
                 tl.to(textElement, {
@@ -42,7 +41,6 @@ export default function IntroAnimation() {
                     onComplete: () => {
                         if (textElement) {
                             textElement.innerText = word;
-                            // Reset position for entry
                             gsap.set(textElement, { y: 20 });
                         }
                     }
@@ -55,12 +53,11 @@ export default function IntroAnimation() {
                     })
                     .to(textElement, {
                         opacity: 1,
-                        duration: 0.4 // Hold
+                        duration: 0.4
                     });
             });
         }
 
-        // Transition to final title
         tl.to(textElement, {
             opacity: 0,
             y: -20,
@@ -68,9 +65,8 @@ export default function IntroAnimation() {
             ease: "power2.in",
             onComplete: () => {
                 if (textElement) {
-                    textElement.innerText = "The Iterator Project";
-                    // Increased text size for better impact
-                    textElement.className = "text-7xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 text-center";
+                    textElement.innerText = t.intro.final;
+                    textElement.className = "text-7xl md:text-9xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-[#787878] text-center";
                     gsap.set(textElement, { y: 20, scale: 0.9 });
                 }
             }
@@ -84,7 +80,7 @@ export default function IntroAnimation() {
             })
             .to(textElement, {
                 opacity: 1,
-                duration: 1.5 // Hold final text
+                duration: 1.5
             })
             .to(containerRef.current, {
                 opacity: 0,
@@ -95,7 +91,7 @@ export default function IntroAnimation() {
         return () => {
             tl.kill();
         };
-    }, []);
+    }, [t]);
 
     if (!isVisible) return null;
 
@@ -108,7 +104,7 @@ export default function IntroAnimation() {
                 ref={textRef}
                 className="text-4xl md:text-6xl font-bold tracking-tighter"
             >
-                Try
+                {t.intro.initial}
             </div>
         </div>
     );

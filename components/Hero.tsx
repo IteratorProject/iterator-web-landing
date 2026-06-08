@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { CodeReveal } from './CodeReveal';
+import { useLanguage } from '../context/LanguageContext';
 import gsap from 'gsap';
 
 const HERO_CODE = `
@@ -46,9 +47,10 @@ export const Hero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showIterating, setShowIterating] = useState(false);
   const isFirstRender = useRef(true);
-  const projectText1 = "THE ITERATOR";
-  const projectText2 = "PROJECT";
-  const iteratingText = "ITERATING";
+  const { t } = useLanguage();
+  const projectText1 = t.hero.title1;
+  const projectText2 = t.hero.title2;
+  const iteratingText = t.hero.iterating;
 
   const handleToggle = () => {
     gsap.to(titleRef.current, {
@@ -59,12 +61,10 @@ export const Hero = () => {
     });
   };
 
-  // Initial Animation for "THE ITERATOR PROJECT"
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ delay: 0.5 });
 
-      // Initial fade in
       tl.from(titleRef.current, {
         y: 50,
         opacity: 0,
@@ -72,7 +72,6 @@ export const Hero = () => {
         ease: "power4.out",
       });
 
-      // Typewriter effect for project title
       tl.to(".project-char", {
         opacity: 1,
         duration: 0.08,
@@ -80,14 +79,12 @@ export const Hero = () => {
         ease: "none"
       }, "-=0.5");
 
-      // Highlighter swipe
       tl.to(".project-highlighter", {
         scaleX: 1,
         duration: 0.6,
         ease: "power2.out"
       }, "-=0.3");
 
-      // Fade in the subtitle
       tl.to(".hero-footer", {
         opacity: 1,
         y: 0,
@@ -95,7 +92,6 @@ export const Hero = () => {
         ease: "power2.out"
       }, "-=0.2");
 
-      // Simple mouse move effect
       const handleMouseMove = (e: MouseEvent) => {
         const { clientX, clientY } = e;
         const x = (clientX / window.innerWidth - 0.5) * 30;
@@ -116,7 +112,6 @@ export const Hero = () => {
     return () => ctx.revert();
   }, []);
 
-  // Toggle Animation
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -126,11 +121,9 @@ export const Hero = () => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
-      // Reset visibility
       tl.set(titleRef.current, { opacity: 1, y: 0 });
 
       if (showIterating) {
-        // Animate "I AM ITERATING"
         tl.to(".char", {
           opacity: 1,
           duration: 0.1,
@@ -144,7 +137,6 @@ export const Hero = () => {
           ease: "power2.out"
         }, "-=0.3");
       } else {
-        // Animate "THE ITERATOR PROJECT"
         tl.to(".project-char", {
           opacity: 1,
           duration: 0.08,
@@ -165,8 +157,8 @@ export const Hero = () => {
 
   return (
     <CodeReveal codeString={HERO_CODE} className="w-full h-screen" title="Hero">
-      <section ref={containerRef} className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white pointer-events-none"></div>
+      <section ref={containerRef} className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden bg-[radial-gradient(#d4d0c8_1px,transparent_1px)] [background-size:20px_20px]">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#fbf8f6] pointer-events-none"></div>
         <h1
           ref={titleRef}
           onClick={handleToggle}
@@ -174,12 +166,12 @@ export const Hero = () => {
         >
           {showIterating ? (
             <>
-              I AM <br />
+              {t.hero.iAm} <br />
               <span className="relative inline-block px-4">
                 {iteratingText.split("").map((char, i) => (
                   <span key={i} className="char inline-block opacity-0">{char}</span>
                 ))}
-                <div className="highlighter absolute bottom-2 left-0 w-full h-6 md:h-8 bg-[#ccff00] -z-10 transform -rotate-2 skew-x-12 mix-blend-multiply rounded-sm scale-x-0 origin-left"></div>
+                <div className="highlighter absolute bottom-2 left-0 w-full h-6 md:h-8 bg-[#38b868] -z-10 transform -rotate-2 skew-x-12 mix-blend-multiply rounded-sm scale-x-0 origin-left"></div>
               </span>
             </>
           ) : (
@@ -194,14 +186,14 @@ export const Hero = () => {
                 {projectText2.split("").map((char, i) => (
                   <span key={`l2-${i}`} className="project-char inline-block opacity-0">{char}</span>
                 ))}
-                <div className="project-highlighter absolute bottom-2 left-0 w-full h-6 md:h-8 bg-[#ccff00] -z-10 transform -rotate-2 skew-x-12 mix-blend-multiply rounded-sm scale-x-0 origin-left"></div>
+                <div className="project-highlighter absolute bottom-2 left-0 w-full h-6 md:h-8 bg-[#38b868] -z-10 transform -rotate-2 skew-x-12 mix-blend-multiply rounded-sm scale-x-0 origin-left"></div>
               </span>
             </span>
           )}
         </h1>
 
         <div className="hero-footer mt-12 flex flex-col items-center gap-4 z-10 opacity-0 translate-y-4">
-          <p className="text-lg md:text-xl font-mono text-gray-500 tracking-widest uppercase">Try &rarr; Fail &rarr; Learn &rarr; Repeat</p>
+          <p className="text-lg md:text-xl font-mono text-[#787878] tracking-widest uppercase">{t.hero.subtitle}</p>
         </div>
       </section>
     </CodeReveal>
