@@ -1,11 +1,15 @@
 import { Hero } from "../components/Hero";
 import { TheStory } from "../components/TheStory";
-import { TheLoop } from "../components/TheLoop";
+import { LoopWrapper } from "../components/TheLoop";
 import { TheJourney } from "../components/TheJourney";
 import { TheInspiration } from "../components/TheInspiration";
 import { Contact } from "../components/Contact";
+import { Footer } from "../components/Footer";
+import { getAllArticles } from "../lib/articles";
 
 export default function Home() {
+  const articles = getAllArticles();
+
   return (
     <main className="min-h-screen">
       <div id="hero">
@@ -15,7 +19,7 @@ export default function Home() {
         <TheStory />
       </div>
       <div id="loop">
-        <TheLoop />
+        <LoopWrapper articles={articles} />
       </div>
       <div id="inspiration">
         <TheInspiration />
@@ -27,9 +31,7 @@ export default function Home() {
         <Contact />
       </div>
 
-      <footer className="py-12 text-center font-mono text-sm text-gray-400">
-        <p>© {new Date().getFullYear()} The Iterator Project. Built with failure.</p>
-      </footer>
+      <Footer />
     </main>
   );
 }

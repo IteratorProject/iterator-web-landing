@@ -4,23 +4,13 @@ export interface FeedItem {
     id: string;
     type: MediaType;
     title: string;
-    thumbnail: string; // URL or placeholder color
+    description: string;
+    thumbnail: string;
     url: string;
     date: string;
     tags: string[];
+    body?: string;
 }
-
-export const feedData: FeedItem[] = [
-    {
-        id: '1',
-        type: 'youtube',
-        title: 'My First Month Experience after switch Windows to Linux',
-        thumbnail: 'bg-red-100', // Placeholder
-        url: '#',
-        date: '2025-11-01',
-        tags: ['Windows', 'Linux', 'Productivity']
-    }
-];
 
 export interface TimelineItem {
     id: string;
@@ -70,7 +60,7 @@ export const timelineData: TimelineItem[] = [
 
 export interface InspirationItem {
     id: string;
-    videoId: string; // YouTube Video ID
+    videoId: string;
     quote: string;
     author: string;
 }
