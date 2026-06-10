@@ -63,9 +63,8 @@ function parseFrontmatter(raw: string): { frontmatter: Frontmatter; body: string
     };
 }
 
-export function getAllArticles(): ArticleData[] {
-    const articlesDir = path.join(process.cwd(), 'articles');
-    const filenames = fs.readdirSync(articlesDir).filter(f => FILE_PATTERN.test(f));
+function loadArticlesFromDir(dirPath: string): ArticleData[] {
+    const filenames = fs.readdirSync(dirPath).filter(f => FILE_PATTERN.test(f));
 
     const articles: ArticleData[] = [];
 
@@ -73,7 +72,7 @@ export function getAllArticles(): ArticleData[] {
         const parsed = parseFilename(filename);
         if (!parsed) continue;
 
-        const raw = fs.readFileSync(path.join(articlesDir, filename), 'utf-8');
+        const raw = fs.readFileSync(path.join(dirPath, filename), 'utf-8');
         const parsedFm = parseFrontmatter(raw);
         if (!parsedFm) continue;
 
@@ -89,4 +88,12 @@ export function getAllArticles(): ArticleData[] {
 
     articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     return articles;
+}
+
+export function getAllArticles(): ArticleData[] {
+    return loadArticlesFromDir(path.join(process.cwd(), 'articles'));
+}
+
+export function getAllJourneys(): ArticleData[] {
+    return loadArticlesFromDir(path.join(process.cwd(), 'content', 'journeys'));
 }

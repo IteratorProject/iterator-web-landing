@@ -5,10 +5,11 @@ import { TheJourney } from "../components/TheJourney";
 import { TheInspiration } from "../components/TheInspiration";
 import { Contact } from "../components/Contact";
 import { Footer } from "../components/Footer";
-import { getAllArticles } from "../lib/articles";
+import { getAllArticles, getAllJourneys } from "../lib/articles";
 
 export default function Home() {
   const articles = getAllArticles();
+  const journeys = getAllJourneys();
 
   return (
     <main className="min-h-screen">
@@ -25,7 +26,7 @@ export default function Home() {
         <TheInspiration />
       </div>
       <div id="journey">
-        <TheJourney />
+        <TheJourney journeys={journeys} />
       </div>
       <div id="contact">
         <Contact />
